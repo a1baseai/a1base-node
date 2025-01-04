@@ -1,5 +1,6 @@
 // src/api.ts
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+import axios from 'axios';
 import { handleError } from './utils/errorHandler';
 
 /**
@@ -16,7 +17,7 @@ class APIService {
   private baseURL: string;
 
 //   https://api.a1base.com/v1/messages
-  constructor(credentials: APICredentials, baseURL: string = 'https://api.a1base.com/v1/messages') {
+  constructor(credentials: APICredentials, baseURL = 'https://api.a1base.com/v1/messages') {
     this.credentials = credentials;
     this.baseURL = baseURL;
     this.axiosInstance = axios.create({
