@@ -205,7 +205,7 @@ describe('MessageAPI', () => {
     });
 
     await expect(client.getUpdates()).rejects.toThrow(
-      'API Error: 500 - Internal Server Error'
+      'API Error: Server error - Please try again later or contact support if the issue persists'
     );
   });
 
@@ -234,7 +234,7 @@ describe('MessageAPI', () => {
     expect(response).toEqual({ status: 'received' });
   });
 
-  it('should handle error when incoming WhatsApp message fails', async () => {
+  describe('WhatsApp error handling', () => {
     const incomingData = {
       external_thread_id: '3456098@s.whatsapp',
       external_message_id: '2asd5678cfvgh123',
@@ -248,15 +248,56 @@ describe('MessageAPI', () => {
       secret_key: 'xxx',
     };
 
-    mock.onPost('/wa/whatsapp/incoming').reply(config => {
-      // Verify headers
-      expect(config.headers!['X-API-Key']).toBe(credentials.apiKey);
-      expect(config.headers!['X-API-Secret']).toBe(credentials.apiSecret);
-      return [400, { detail: 'Invalid message format' }];
+    it('should handle invalid message format error', async () => {
+      mock.onPost('/wa/whatsapp/incoming').reply(config => {
+        // Verify headers
+        expect(config.headers!['X-API-Key']).toBe(credentials.apiKey);
+        expect(config.headers!['X-API-Secret']).toBe(credentials.apiSecret);
+        return [400, { detail: 'Invalid message format' }];
+      });
+
+      await expect(client.handleWhatsAppIncoming(incomingData)).rejects.toThrow(
+        'WhatsApp Error: Invalid message format - Invalid message format'
+      );
     });
 
-    await expect(client.handleWhatsAppIncoming(incomingData)).rejects.toThrow(
-      'API Error: 400 - Invalid message format'
-    );
+    it('should handle validation errors', async () => {
+      mock.onPost('/wa/whatsapp/incoming').reply(config => {
+        // Verify headers
+        expect(config.headers!['X-API-Key']).toBe(credentials.apiKey);
+        expect(config.headers!['X-API-Secret']).toBe(credentials.apiSecret);
+        return [422, {
+          detail: [
+            { loc: ['body', 'content'], msg: 'field required', type: 'value_error.missing' },
+            { loc: ['body', 'sender_number'], msg: 'invalid phone number', type: 'value_error.phone' }
+          ]
+        }];
+      });
+
+      await expect(client.handleWhatsAppIncoming(incomingData)).rejects.toThrow(
+        'WhatsApp Validation Error: content: field required; sender_number: invalid phone number'
+      );
+    });
+
+    it('should handle server errors with fallback message', async () => {
+      mock.onPost('/wa/whatsapp/incoming').reply(config => {
+        // Verify headers
+        expect(config.headers!['X-API-Key']).toBe(credentials.apiKey);
+        expect(config.headers!['X-API-Secret']).toBe(credentials.apiSecret);
+        return [500, { detail: 'Internal server error' }];
+      });
+
+      await expect(client.handleWhatsAppIncoming(incomingData)).rejects.toThrow(
+        'WhatsApp Error: Server error - Please try again later or contact support if the issue persists'
+      );
+    });
+
+    it('should handle network errors', async () => {
+      mock.onPost('/wa/whatsapp/incoming').networkError();
+
+      await expect(client.handleWhatsAppIncoming(incomingData)).rejects.toThrow(
+        'Network Error: Unable to connect to the server - Please check your internet connection and try again'
+      );
+    });
   });
 });
