@@ -76,3 +76,15 @@ export interface APICredentials {
   apiKey: string;
   apiSecret: string;
 }
+
+/**
+ * Configuration options for API rate limiting
+ */
+export interface RateLimitConfig {
+  /** Maximum number of requests per second (default: 10) */
+  requestsPerSecond?: number;
+  /** Maximum number of requests to queue (default: 100) */
+  maxQueueSize?: number;
+  /** Time to wait before retrying when rate limited (ms) (default: 1000) */
+  retryAfter?: number;
+}
