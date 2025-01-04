@@ -5,7 +5,8 @@ import {
   SendGroupMessageData, 
   MessageDetails, 
   GroupDetails,
-  RecentMessages
+  RecentMessages,
+  WhatsAppIncomingData
 } from './types';
 
 class MessageAPI {
@@ -71,6 +72,15 @@ class MessageAPI {
   public async getUpdates(): Promise<any> {
     const url = `/updates`;
     return this.apiService.get(url);
+  }
+
+  /**
+   * Handle incoming WhatsApp message.
+   * @param data - WhatsApp incoming message data.
+   */
+  public async handleWhatsAppIncoming(data: WhatsAppIncomingData): Promise<any> {
+    const url = '/wa/whatsapp/incoming';
+    return this.apiService.post(url, data);
   }
 }
 
