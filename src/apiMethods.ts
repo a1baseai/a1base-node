@@ -10,6 +10,7 @@ import type {
   WhatsAppIncomingData
 } from './types';
 import { sanitizeInput, validateAttachmentUri } from './utils/sanitizer';
+import { isTimestampFresh } from './utils/timeValidator';
 
 class MessageAPI {
   private apiService: APIService;
@@ -91,8 +92,19 @@ class MessageAPI {
    * @param data - WhatsApp incoming message data.
    */
   public async handleWhatsAppIncoming(data: WhatsAppIncomingData): Promise<any> {
+    // Validate timestamp to prevent replay attacks
+    if (!isTimestampFresh(data.timestamp)) {
+      throw new Error('Webhook request expired: timestamp too old');
+    }
+
+    // Sanitize content before processing
+    const sanitizedData = {
+      ...data,
+      content: sanitizeInput(data.content)
+    };
+
     const url = '/wa/whatsapp/incoming';
-    return this.apiService.post(url, data);
+    return this.apiService.post(url, sanitizedData);
   }
 }
 
