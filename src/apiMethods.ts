@@ -1,6 +1,7 @@
 // src/apiMethods.ts
-import APIService, { APICredentials } from './api';
-import { 
+import type { APICredentials } from './api';
+import APIService from './api';
+import type { 
   SendIndividualMessageData, 
   SendGroupMessageData, 
   MessageDetails, 
@@ -8,6 +9,8 @@ import {
   RecentMessages,
   WhatsAppIncomingData
 } from './types';
+import { sanitizeInput, validateAttachmentUri } from './utils/sanitizer';
+import { isTimestampFresh } from './utils/timeValidator';
 
 class MessageAPI {
   private apiService: APIService;
@@ -22,8 +25,13 @@ class MessageAPI {
    * @param data - Message data.
    */
   public async sendIndividualMessage(accountId: string, data: SendIndividualMessageData): Promise<any> {
+    const sanitizedData = {
+      ...data,
+      content: sanitizeInput(data.content),
+      attachment_uri: data.attachment_uri ? validateAttachmentUri(data.attachment_uri) : undefined
+    };
     const url = `/individual/${accountId}/send`;
-    return this.apiService.post(url, data);
+    return this.apiService.post(url, sanitizedData);
   }
 
   /**
@@ -32,8 +40,13 @@ class MessageAPI {
    * @param data - Group message data.
    */
   public async sendGroupMessage(accountId: string, data: SendGroupMessageData): Promise<any> {
+    const sanitizedData = {
+      ...data,
+      content: sanitizeInput(data.content),
+      attachment_uri: data.attachment_uri ? validateAttachmentUri(data.attachment_uri) : undefined
+    };
     const url = `/group/${accountId}/send`;
-    return this.apiService.post(url, data);
+    return this.apiService.post(url, sanitizedData);
   }
 
   /**
@@ -79,8 +92,19 @@ class MessageAPI {
    * @param data - WhatsApp incoming message data.
    */
   public async handleWhatsAppIncoming(data: WhatsAppIncomingData): Promise<any> {
+    // Validate timestamp to prevent replay attacks
+    if (!isTimestampFresh(data.timestamp)) {
+      throw new Error('Webhook request expired: timestamp too old');
+    }
+
+    // Sanitize content before processing
+    const sanitizedData = {
+      ...data,
+      content: sanitizeInput(data.content)
+    };
+
     const url = '/wa/whatsapp/incoming';
-    return this.apiService.post(url, data);
+    return this.apiService.post(url, sanitizedData);
   }
 }
 

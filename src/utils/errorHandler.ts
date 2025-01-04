@@ -1,4 +1,4 @@
-import { AxiosError } from 'axios';
+import type { AxiosError } from 'axios';
 
 interface ValidationError {
   loc: (string | number)[];
@@ -45,9 +45,9 @@ export const handleError = (error: AxiosError): never => {
             : 'Invalid request format';
           throw new Error(`${prefix}: Invalid message format - ${detail}`);
         case 401:
-          throw new Error(`${prefix}: Authentication failed - Please check your API credentials`);
+          throw new Error(`${prefix}: Authentication failed`);
         case 403:
-          throw new Error(`${prefix}: Access denied - Please verify your account permissions`);
+          throw new Error(`${prefix}: Access denied`);
         case 500:
         case 502:
         case 503:
@@ -66,25 +66,22 @@ export const handleError = (error: AxiosError): never => {
           : 'Invalid request format';
         throw new Error(`${prefix}: Invalid message format - ${detail}`);
       case 401:
-        throw new Error(`${prefix}: Authentication failed - Please check your API credentials`);
+        throw new Error(`${prefix}: Authentication failed`);
       case 403:
-        throw new Error(`${prefix}: Access denied - Please verify your account permissions`);
+        throw new Error(`${prefix}: Access denied`);
       case 429:
         throw new Error(`${prefix}: Rate limit exceeded - Please try again later`);
       case 500:
-        throw new Error(`${prefix}: Server error - Please try again later or contact support if the issue persists`);
+        throw new Error(`${prefix}: Server error`);
       case 502: 
       case 503:
       case 504:
-        throw new Error(`${prefix}: Service temporarily unavailable - Please try again in a few minutes`);
+        throw new Error(`${prefix}: Service temporarily unavailable`);
       default:
-        const suggestion = status >= 500 
-          ? 'Please try again later or contact support if the issue persists'
-          : 'Please verify your request and try again';
-        throw new Error(`${prefix}: ${status} - ${errorData.detail}. ${suggestion}`);
+        throw new Error(`${prefix}: Request failed`);
     }
   }
 
   // Fallback for unexpected errors (no response)
-  throw new Error(`Unexpected Error: ${error.message}. Please try again or contact support if the issue persists`);
+  throw new Error('An unexpected error occurred');
 }
