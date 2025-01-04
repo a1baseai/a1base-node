@@ -82,5 +82,15 @@ class MessageAPI {
             return this.apiService.get(url);
         });
     }
+    /**
+     * Handle incoming WhatsApp message.
+     * @param data - WhatsApp incoming message data.
+     */
+    handleWhatsAppIncoming(data) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const url = '/wa/whatsapp/incoming';
+            return this.apiService.post(url, data);
+        });
+    }
 }
 exports.default = MessageAPI;

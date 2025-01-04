@@ -56,6 +56,19 @@ export interface RecentMessages {
   messages: RecentMessage[];
 }
 
+export interface WhatsAppIncomingData {
+  a1_account_number: string;
+  chat_type: 'individual' | 'group' | 'broadcast' | string;
+  content: string;
+  external_message_id: string;
+  external_thread_id: string;
+  participants: string[];
+  sender_name: string;
+  sender_number: string;
+  secret_key: string;
+  timestamp: number;
+}
+
 /**
  * Interface for API Credentials
  */

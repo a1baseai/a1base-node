@@ -208,4 +208,55 @@ describe('MessageAPI', () => {
       'API Error: 500 - Internal Server Error'
     );
   });
+
+  it('should handle incoming WhatsApp messages successfully', async () => {
+    const incomingData = {
+      external_thread_id: '3456098@s.whatsapp',
+      external_message_id: '2asd5678cfvgh123',
+      chat_type: 'group',
+      content: 'Hi there!',
+      sender_name: 'Bobby',
+      sender_number: '61421868490',
+      participants: ['61421868490', '61433174782'],
+      a1_account_number: '61421868490',
+      timestamp: 1734486451000,
+      secret_key: 'xxx',
+    };
+
+    mock.onPost('/wa/whatsapp/incoming').reply(config => {
+      // Verify headers
+      expect(config.headers!['X-API-Key']).toBe(credentials.apiKey);
+      expect(config.headers!['X-API-Secret']).toBe(credentials.apiSecret);
+      return [200, { status: 'received' }];
+    });
+
+    const response = await client.handleWhatsAppIncoming(incomingData);
+    expect(response).toEqual({ status: 'received' });
+  });
+
+  it('should handle error when incoming WhatsApp message fails', async () => {
+    const incomingData = {
+      external_thread_id: '3456098@s.whatsapp',
+      external_message_id: '2asd5678cfvgh123',
+      chat_type: 'group',
+      content: 'Hi there!',
+      sender_name: 'Bobby',
+      sender_number: '61421868490',
+      participants: ['61421868490', '61433174782'],
+      a1_account_number: '61421868490',
+      timestamp: 1734486451000,
+      secret_key: 'xxx',
+    };
+
+    mock.onPost('/wa/whatsapp/incoming').reply(config => {
+      // Verify headers
+      expect(config.headers!['X-API-Key']).toBe(credentials.apiKey);
+      expect(config.headers!['X-API-Secret']).toBe(credentials.apiSecret);
+      return [400, { detail: 'Invalid message format' }];
+    });
+
+    await expect(client.handleWhatsAppIncoming(incomingData)).rejects.toThrow(
+      'API Error: 400 - Invalid message format'
+    );
+  });
 });
