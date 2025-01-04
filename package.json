@@ -1,0 +1,26 @@
+{
+  "name": "a1base-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+      "build": "tsc",
+      "test": "jest",
+      "prepare": "npm run build"
+  },
+  "keywords": [],
+  "author": "pennie@a1base.com, pasha@a1base.com",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.7.7"
+  },
+  "devDependencies": {
+    "@types/axios": "^0.14.4",
+    "@types/jest": "^29.5.14",
+    "@types/node": "^22.9.0",
+    "axios-mock-adapter": "^2.1.0",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.2.5",
+    "typescript": "^5.6.3"
+  }
+}
