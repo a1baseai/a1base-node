@@ -9,6 +9,7 @@ import type {
   RecentMessages,
   WhatsAppIncomingData
 } from './types';
+import { sanitizeInput, validateAttachmentUri } from './utils/sanitizer';
 
 class MessageAPI {
   private apiService: APIService;
@@ -23,8 +24,13 @@ class MessageAPI {
    * @param data - Message data.
    */
   public async sendIndividualMessage(accountId: string, data: SendIndividualMessageData): Promise<any> {
+    const sanitizedData = {
+      ...data,
+      content: sanitizeInput(data.content),
+      attachment_uri: data.attachment_uri ? validateAttachmentUri(data.attachment_uri) : undefined
+    };
     const url = `/individual/${accountId}/send`;
-    return this.apiService.post(url, data);
+    return this.apiService.post(url, sanitizedData);
   }
 
   /**
@@ -33,8 +39,13 @@ class MessageAPI {
    * @param data - Group message data.
    */
   public async sendGroupMessage(accountId: string, data: SendGroupMessageData): Promise<any> {
+    const sanitizedData = {
+      ...data,
+      content: sanitizeInput(data.content),
+      attachment_uri: data.attachment_uri ? validateAttachmentUri(data.attachment_uri) : undefined
+    };
     const url = `/group/${accountId}/send`;
-    return this.apiService.post(url, data);
+    return this.apiService.post(url, sanitizedData);
   }
 
   /**

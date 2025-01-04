@@ -11,13 +11,27 @@ export interface APICredentials {
   apiSecret: string;
 }
 
+/**
+ * APIService handles all HTTP communication with the A1Base API
+ * @remarks
+ * All communication with the API must be over HTTPS for security.
+ * Non-HTTPS URLs will be rejected.
+ */
 class APIService {
   private axiosInstance: AxiosInstance;
   private credentials: APICredentials;
   private baseURL: string;
 
-//   https://api.a1base.com/v1/messages
+  /**
+   * Creates an instance of APIService
+   * @param credentials - API credentials for authentication
+   * @param baseURL - Base URL for API requests (must use HTTPS)
+   * @throws {Error} If baseURL does not use HTTPS protocol
+   */
   constructor(credentials: APICredentials, baseURL = 'https://api.a1base.com/v1/messages') {
+    if (!baseURL.toLowerCase().startsWith('https://')) {
+      throw new Error('APIService requires HTTPS. Non-HTTPS URLs are not allowed for security reasons.');
+    }
     this.credentials = credentials;
     this.baseURL = baseURL;
     this.axiosInstance = axios.create({
