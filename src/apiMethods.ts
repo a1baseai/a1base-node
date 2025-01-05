@@ -1,5 +1,5 @@
 // src/apiMethods.ts
-import type { APICredentials } from './api';
+import type { APICredentials } from './types';
 import APIService from './api';
 import type { 
   SendIndividualMessageData, 
