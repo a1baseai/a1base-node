@@ -72,6 +72,19 @@ export interface WhatsAppIncomingData {
 /**
  * Interface for API Credentials
  */
+export interface WhatsAppIncomingData {
+  external_thread_id: string;
+  external_message_id: string;
+  chat_type: 'group' | 'individual' | 'broadcast';
+  content: string;
+  sender_name: string;
+  sender_number: string;
+  participants: string[];
+  a1_account_number: string;
+  timestamp: number;
+  secret_key: string;
+}
+
 export interface APICredentials {
   apiKey: string;
   apiSecret: string;
