@@ -12,7 +12,7 @@ import type {
 import { sanitizeInput, validateAttachmentUri } from './utils/sanitizer';
 import { isTimestampFresh } from './utils/timeValidator';
 
-class MessageAPI {
+class A1BaseAPI {
   private apiService: APIService;
 
   constructor(credentials: APICredentials, baseURL?: string) {
@@ -108,4 +108,4 @@ class MessageAPI {
   }
 }
 
-export default MessageAPI;
+export default A1BaseAPI;
