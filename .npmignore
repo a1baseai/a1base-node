@@ -1,0 +1,4 @@
+# Keep everything in dist/
+# (We specifically don't exclude dist or *.d.ts.)
+node_modules
+.env

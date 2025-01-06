@@ -1,6 +1,6 @@
 {
   "name": "a1base-node",
-  "version": "0.0.31",
+  "version": "0.0.32",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -8,8 +8,10 @@
     "build": "tsc",
     "test": "jest",
     "prepare": "npm run build"
-  },
-  
+  }, 
+   "files": [
+    "dist/**/*"
+  ],
   "keywords": [],
   "author": "developers@a1base.com",
   "license": "ISC",

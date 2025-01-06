@@ -1,7 +1,7 @@
 node_modules
-dist
+-dist
 .env
 # Generated files
-*.js
-*.js.map
-*.d.ts
+-*.js
+-*.js.map
+-*.d.ts
