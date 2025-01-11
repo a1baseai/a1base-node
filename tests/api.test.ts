@@ -1,8 +1,8 @@
 // tests/api.test.ts
-import MessageAPI from '../src/apiMethods';
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
-import { RecentMessages, APICredentials } from '../src/types';
+import MessageAPI from '../src/apiMethods';
+import { APICredentials, RecentMessages } from '../src/types';
 
 const mock = new MockAdapter(axios);
 
@@ -213,7 +213,7 @@ describe('MessageAPI', () => {
     const incomingData = {
       external_thread_id: '3456098@s.whatsapp',
       external_message_id: '2asd5678cfvgh123',
-      chat_type: 'group',
+      chat_type: 'group' as const,
       content: 'Hi there!',
       sender_name: 'Bobby',
       sender_number: '61421868490',
@@ -238,7 +238,7 @@ describe('MessageAPI', () => {
     const incomingData = {
       external_thread_id: '3456098@s.whatsapp',
       external_message_id: '2asd5678cfvgh123',
-      chat_type: 'group',
+      chat_type: 'group' as const,
       content: 'Hi there!',
       sender_name: 'Bobby',
       sender_number: '61421868490',
