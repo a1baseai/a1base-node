@@ -219,7 +219,7 @@ describe('MessageAPI', () => {
       sender_number: '61421868490',
       participants: ['61421868490', '61433174782'],
       a1_account_number: '61421868490',
-      timestamp: 1734486451000,
+      timestamp: new Date().getTime(),
       secret_key: 'xxx',
     };
 
@@ -244,7 +244,7 @@ describe('MessageAPI', () => {
       sender_number: '61421868490',
       participants: ['61421868490', '61433174782'],
       a1_account_number: '61421868490',
-      timestamp: 1734486451000,
+      timestamp: new Date().getTime(),
       secret_key: 'xxx',
     };
 

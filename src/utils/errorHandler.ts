@@ -72,13 +72,13 @@ export const handleError = (error: AxiosError): never => {
       case 429:
         throw new Error(`${prefix}: Rate limit exceeded - Please try again later`);
       case 500:
-        throw new Error(`${prefix}: Server error`);
+        throw new Error(`${prefix}: Server error - Please try again later or contact support if the issue persists`);
       case 502: 
       case 503:
       case 504:
         throw new Error(`${prefix}: Service temporarily unavailable`);
       default:
-        throw new Error(`${prefix}: Request failed`);
+        throw new Error(`${prefix}: ${status} - ${errorData.detail}`);
     }
   }
 
