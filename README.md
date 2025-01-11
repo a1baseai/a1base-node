@@ -260,7 +260,7 @@ try {
 }
 ```
 
-##Error Handling
+## Error Handling
 The A1BaseAPI client throws descriptive errors based on API responses. It's essential to handle these errors gracefully in your application.
 Example with try-catch:
 
