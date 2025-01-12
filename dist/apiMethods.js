@@ -12,12 +12,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+// src/apiMethods.ts
 const api_1 = __importDefault(require("./api"));
 const sanitizer_1 = require("./utils/sanitizer");
 const timeValidator_1 = require("./utils/timeValidator");
 class A1BaseAPI {
-    constructor(credentials, baseURL) {
-        this.apiService = new api_1.default(credentials, baseURL);
+    constructor({ credentials, baseURL }) {
+        this.apiService = new api_1.default({ credentials, baseURL });
     }
     /**
      * Send an individual message.

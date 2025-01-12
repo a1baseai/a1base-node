@@ -1,5 +1,5 @@
 // src/api.ts
-import type { AxiosInstance, AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
+import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import axios from 'axios';
 import { APICredentials, RateLimitConfig } from './types';
 import { handleError } from './utils/errorHandler';
@@ -38,11 +38,15 @@ class APIService {
    * @param baseURL - Base URL for API requests (must use HTTPS)
    * @throws {Error} If baseURL does not use HTTPS protocol
    */
-  constructor(
-    credentials: APICredentials,
+  constructor({
+    credentials,
     baseURL = 'https://api.a1base.com/v1/messages',
-    rateLimitConfig: RateLimitConfig = {}
-  ) {
+    rateLimitConfig = {}
+  }: {
+    credentials: APICredentials;
+    baseURL?: string;
+    rateLimitConfig?: RateLimitConfig;
+  }) {
     if (!baseURL.toLowerCase().startsWith('https://')) {
       throw new Error('APIService requires HTTPS. Non-HTTPS URLs are not allowed for security reasons.');
     }

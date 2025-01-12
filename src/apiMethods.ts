@@ -1,22 +1,20 @@
 // src/apiMethods.ts
-import type { APICredentials } from './types';
 import APIService from './api';
-import type { 
-  SendIndividualMessageData, 
-  SendGroupMessageData, 
-  MessageDetails, 
-  GroupDetails,
-  RecentMessages,
-  WhatsAppIncomingData
-} from './types';
+import type { APICredentials, GroupDetails, MessageDetails, RecentMessages, SendGroupMessageData, SendIndividualMessageData, WhatsAppIncomingData } from './types';
 import { sanitizeInput, validateAttachmentUri } from './utils/sanitizer';
 import { isTimestampFresh } from './utils/timeValidator';
 
 class A1BaseAPI {
   private apiService: APIService;
 
-  constructor(credentials: APICredentials, baseURL?: string) {
-    this.apiService = new APIService(credentials, baseURL);
+  constructor({
+    credentials,
+    baseURL
+  }: {
+    credentials: APICredentials;
+    baseURL?: string;
+  }) {
+    this.apiService = new APIService({ credentials, baseURL });
   }
 
   /**

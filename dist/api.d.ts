@@ -20,7 +20,11 @@ declare class APIService {
      * @param baseURL - Base URL for API requests (must use HTTPS)
      * @throws {Error} If baseURL does not use HTTPS protocol
      */
-    constructor(credentials: APICredentials, baseURL?: string, rateLimitConfig?: RateLimitConfig);
+    constructor({ credentials, baseURL, rateLimitConfig }: {
+        credentials: APICredentials;
+        baseURL?: string;
+        rateLimitConfig?: RateLimitConfig;
+    });
     /**
      * Process the request queue while respecting rate limits
      * @private

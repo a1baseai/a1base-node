@@ -14,7 +14,7 @@ const accountId = 'test_account';
 const messageId = 'test_message';
 const threadId = 'test_thread';
 
-const client = new MessageAPI(credentials, 'https://api.a1base.com/v1/messages');
+const client = new MessageAPI({ credentials, baseURL: 'https://api.a1base.com/v1/messages' });
 
 describe('MessageAPI', () => {
   afterEach(() => {

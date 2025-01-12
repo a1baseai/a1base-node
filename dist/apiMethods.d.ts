@@ -1,8 +1,10 @@
-import type { APICredentials } from './types';
-import type { SendIndividualMessageData, SendGroupMessageData, MessageDetails, GroupDetails, RecentMessages, WhatsAppIncomingData } from './types';
+import type { APICredentials, GroupDetails, MessageDetails, RecentMessages, SendGroupMessageData, SendIndividualMessageData, WhatsAppIncomingData } from './types';
 declare class A1BaseAPI {
     private apiService;
-    constructor(credentials: APICredentials, baseURL?: string);
+    constructor({ credentials, baseURL }: {
+        credentials: APICredentials;
+        baseURL?: string;
+    });
     /**
      * Send an individual message.
      * @param accountId - The account ID.
