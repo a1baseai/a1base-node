@@ -102,11 +102,11 @@ Secure error handling implementation:
 Importing the Library
 You can import the A1BaseAPI class using CommonJS or ES Module syntax.
 
-```bash
-# CommonJS
+```javascript
+// CommonJS
 const { A1BaseAPI } = require('a1base-node');
 
-# ES Module
+// ES Module
 import { A1BaseAPI } from 'a1base-node';
 ```
 
@@ -114,12 +114,13 @@ import { A1BaseAPI } from 'a1base-node';
 
 Initialize the A1BaseAPI client with your API credentials. Both apiKey and apiSecret are required for authentication.
 
-```bash
-    const credentials = {
+```javascript
+const credentials = {
     apiKey: 'YOUR_API_KEY',
     apiSecret: 'YOUR_API_SECRET',
-    };
-    // HTTPS is enforced for security
+};
+
+// HTTPS is enforced for security
 const baseURL = 'https://api.a1base.com/v1/messages';
 
 const client = new A1BaseAPI(credentials, baseURL);
@@ -264,7 +265,7 @@ try {
 The A1BaseAPI client throws descriptive errors based on API responses. It's essential to handle these errors gracefully in your application.
 Example with try-catch:
 
-```bash
+```javascript
 try {
   const response = await client.sendIndividualMessage('account123', messageData);
   console.log(response);
@@ -278,5 +279,4 @@ try {
 } catch (error) {
   console.error('Error:', error.message);
 }
-
 ```
