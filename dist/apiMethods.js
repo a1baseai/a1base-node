@@ -93,7 +93,7 @@ class A1BaseAPI {
     handleWhatsAppIncoming(data) {
         return __awaiter(this, void 0, void 0, function* () {
             // Validate timestamp to prevent replay attacks
-            if (!(0, timeValidator_1.isTimestampFresh)(data.timestamp)) {
+            if (!(0, timeValidator_1.isTimestampFresh)(new Date(data.timestamp).getTime())) {
                 throw new Error('Webhook request expired: timestamp too old');
             }
             // Sanitize content before processing

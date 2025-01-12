@@ -135,6 +135,7 @@ describe('MessageAPI', () => {
   it('should send a group message successfully', async () => {
     const data = {
       content: 'Hello, Group!',
+      from: '+1234567890',
       thread_id: 'thread123',
       service: 'whatsapp',
     };
@@ -211,22 +212,25 @@ describe('MessageAPI', () => {
 
   it('should handle incoming WhatsApp messages successfully', async () => {
     const incomingData = {
-      external_thread_id: '3456098@s.whatsapp',
-      external_message_id: '2asd5678cfvgh123',
-      chat_type: 'group' as const,
+      thread_id: '3456098@s.whatsapp',
+      message_id: '2asd5678cfvgh123',
+      thread_type: 'group' as const,
       content: 'Hi there!',
       sender_name: 'Bobby',
       sender_number: '61421868490',
-      participants: ['61421868490', '61433174782'],
-      a1_account_number: '61421868490',
-      timestamp: new Date().getTime(),
-      secret_key: 'xxx',
+      a1_account_id: accountId,
+      timestamp: new Date().toISOString()
     };
 
     mock.onPost('/wa/whatsapp/incoming').reply(config => {
       // Verify headers
       expect(config.headers!['X-API-Key']).toBe(credentials.apiKey);
       expect(config.headers!['X-API-Secret']).toBe(credentials.apiSecret);
+
+      // Verify data
+      const data = JSON.parse(config.data);
+      expect(data.a1_account_id).toBe(accountId);
+
       return [200, { status: 'received' }];
     });
 
@@ -236,16 +240,14 @@ describe('MessageAPI', () => {
 
   describe('WhatsApp error handling', () => {
     const incomingData = {
-      external_thread_id: '3456098@s.whatsapp',
-      external_message_id: '2asd5678cfvgh123',
-      chat_type: 'group' as const,
+      thread_id: '3456098@s.whatsapp',
+      message_id: '2asd5678cfvgh123',
+      thread_type: 'group' as const,
       content: 'Hi there!',
       sender_name: 'Bobby',
       sender_number: '61421868490',
-      participants: ['61421868490', '61433174782'],
-      a1_account_number: '61421868490',
-      timestamp: new Date().getTime(),
-      secret_key: 'xxx',
+      a1_account_id: accountId,
+      timestamp: new Date().toISOString()
     };
 
     it('should handle invalid message format error', async () => {
@@ -253,6 +255,11 @@ describe('MessageAPI', () => {
         // Verify headers
         expect(config.headers!['X-API-Key']).toBe(credentials.apiKey);
         expect(config.headers!['X-API-Secret']).toBe(credentials.apiSecret);
+
+        // Verify data
+        const data = JSON.parse(config.data);
+        expect(data.a1_account_id).toBe(accountId);
+
         return [400, { detail: 'Invalid message format' }];
       });
 

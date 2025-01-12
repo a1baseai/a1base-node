@@ -11,6 +11,7 @@ export interface SendIndividualMessageData {
 
 export interface SendGroupMessageData {
   content: string;
+  from: string;
   thread_id: string;
   service: string;
   attachment_uri?: string;
@@ -57,16 +58,14 @@ export interface RecentMessages {
 }
 
 export interface WhatsAppIncomingData {
-  external_thread_id: string;
-  external_message_id: string;
-  chat_type: 'group' | 'individual' | 'broadcast';
+  thread_id: string;
+  message_id: string;
+  thread_type: 'individual' | 'group' | 'broadcast';
   content: string;
-  sender_name: string;
   sender_number: string;
-  participants: string[];
-  a1_account_number: string;
-  timestamp: number;
-  secret_key: string;
+  sender_name: string;
+  a1_account_id: string;
+  timestamp: string;
 }
 
 export interface APICredentials {

@@ -156,6 +156,7 @@ Sends a message to a group thread.
 const groupMessageData = {
   content: "Hello, Group!", // Message body text
   from: "+1234567890", // Sender's phone number
+  thread_id: "123", // Thread ID
   service: "whatsapp", // Chat service (whatsapp/telegram)
   attachment_uri: "https://...", // Optional file/media attachment
 };
