@@ -1,7 +1,7 @@
 {
   "name": "a1base-node",
-  "version": "0.0.34",
-  "description": "",
+  "version": "0.0.35",
+  "description": "The official A1Base Node.js SDK",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
