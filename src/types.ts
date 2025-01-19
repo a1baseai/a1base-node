@@ -66,6 +66,7 @@ export interface WhatsAppIncomingData {
   sender_name: string;
   a1_account_id: string;
   timestamp: string;
+  service: 'email' | 'sms' | 'whatsapp';
 }
 
 export interface APICredentials {
