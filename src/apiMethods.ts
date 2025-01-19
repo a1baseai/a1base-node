@@ -54,7 +54,7 @@ class A1BaseAPI {
         ? validateAttachmentUri(data.attachment_uri)
         : undefined,
     };
-    const url = `/individual/${accountId}/send`;
+    const url = `/messages/individual/${accountId}/send`;
     return this.apiService.post(url, sanitizedData);
   }
 
@@ -86,7 +86,7 @@ class A1BaseAPI {
         ? validateAttachmentUri(data.attachment_uri)
         : undefined,
     };
-    const url = `/group/${accountId}/send`;
+    const url = `/messages/group/${accountId}/send`;
     return this.apiService.post(url, sanitizedData);
   }
 
@@ -99,7 +99,7 @@ class A1BaseAPI {
     accountId: string,
     messageId: string
   ): Promise<MessageDetails> {
-    const url = `/individual/${accountId}/get-details/${messageId}`;
+    const url = `/messages/individual/${accountId}/get-details/${messageId}`;
     return this.apiService.get(url);
   }
 
@@ -112,7 +112,7 @@ class A1BaseAPI {
     accountId: string,
     threadId: string
   ): Promise<GroupDetails> {
-    const url = `/threads/${accountId}/get-details/${threadId}`;
+    const url = `/messages/threads/${accountId}/get-details/${threadId}`;
     return this.apiService.get(url);
   }
 
@@ -125,7 +125,7 @@ class A1BaseAPI {
     accountId: string,
     threadId: string
   ): Promise<RecentMessages> {
-    const url = `/threads/${accountId}/get-recent/${threadId}`;
+    const url = `/messages/threads/${accountId}/get-recent/${threadId}`;
     return this.apiService.get(url);
   }
 
@@ -133,7 +133,7 @@ class A1BaseAPI {
    * Get updates.
    */
   public async getUpdates(): Promise<any> {
-    const url = `/updates`;
+    const url = `/messages/updates`;
     return this.apiService.get(url);
   }
 
@@ -155,7 +155,7 @@ class A1BaseAPI {
       content: sanitizeInput(data.content),
     };
 
-    const url = '/wa/whatsapp/incoming';
+    const url = '/messages/wa/whatsapp/incoming';
     return this.apiService.post(url, sanitizedData);
   }
 

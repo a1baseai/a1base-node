@@ -27,7 +27,7 @@ class APIService {
      * @param baseURL - Base URL for API requests (must use HTTPS)
      * @throws {Error} If baseURL does not use HTTPS protocol
      */
-    constructor({ credentials, baseURL = 'https://api.a1base.com/v1/messages', rateLimitConfig = {} }) {
+    constructor({ credentials, baseURL = 'https://api.a1base.com/v1', rateLimitConfig = {} }) {
         var _a, _b, _c;
         this.requestQueue = [];
         this.processingQueue = false;

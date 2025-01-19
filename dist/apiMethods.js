@@ -130,7 +130,7 @@ class A1BaseAPI {
             const sanitizedData = Object.assign(Object.assign({}, data), { subject: (0, sanitizer_1.sanitizeInput)(data.subject), body: (0, sanitizer_1.sanitizeInput)(data.body), attachment_uri: data.attachment_uri
                     ? (0, sanitizer_1.validateAttachmentUri)(data.attachment_uri)
                     : undefined });
-            const url = `/v1/emails/${accountId}/send`;
+            const url = `/emails/${accountId}/send`;
             return this.apiService.post(url, sanitizedData);
         });
     }
