@@ -21,6 +21,11 @@ class MessageAPI {
    * @param data - Message data.
    */
   public async sendIndividualMessage(accountId: string, data: SendIndividualMessageData): Promise<any> {
+    if (!data.from) {
+      throw new Error(
+        "[A1BaseAPI] Missing 'from' property: a valid 'from' number is required to send an individual message."
+      );
+    }
     const url = `/individual/${accountId}/send`;
     return this.apiService.post(url, data);
   }

@@ -2,7 +2,7 @@
 import MessageAPI from '../src/apiMethods';
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
-import { RecentMessages, APICredentials } from '../src/types';
+import { RecentMessages, APICredentials, SendIndividualMessageData } from '../src/types';
 
 const mock = new MockAdapter(axios);
 
@@ -21,6 +21,18 @@ describe('MessageAPI', () => {
     mock.reset();
   });
 
+
+  it('should throw error when from property is missing in individual message', async () => {
+    const data = {
+      content: 'Hello, World!',
+      to: '+0987654321',
+      service: 'whatsapp',
+    } as SendIndividualMessageData;
+
+    await expect(client.sendIndividualMessage(accountId, data)).rejects.toThrow(
+      "[A1BaseAPI] Missing 'from' property: a valid 'from' number is required to send an individual message."
+    );
+  });
 
   it('should send an individual message successfully', async () => {
     const data = {
