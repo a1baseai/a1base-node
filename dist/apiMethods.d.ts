@@ -1,4 +1,4 @@
-import type { APICredentials, GroupDetails, MessageDetails, RecentMessages, SendGroupMessageData, SendIndividualMessageData, WhatsAppIncomingData } from './types';
+import type { APICredentials, GroupDetails, MessageDetails, RecentMessages, SendGroupMessageData, SendIndividualMessageData, WhatsAppIncomingData, EmailSendData } from './types';
 declare class A1BaseAPI {
     private apiService;
     constructor({ credentials, baseURL, }: {
@@ -44,5 +44,12 @@ declare class A1BaseAPI {
      * @param data - WhatsApp incoming message data.
      */
     handleWhatsAppIncoming(data: WhatsAppIncomingData): Promise<any>;
+    /**
+     * Send an email message.
+     * @param accountId - The account ID.
+     * @param data - The email-related data.
+     * @returns The response from the API.
+     */
+    sendEmailMessage(accountId: string, data: EmailSendData): Promise<unknown>;
 }
 export default A1BaseAPI;

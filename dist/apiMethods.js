@@ -28,10 +28,10 @@ class A1BaseAPI {
     sendIndividualMessage(accountId, data) {
         return __awaiter(this, void 0, void 0, function* () {
             if (!data.from) {
-                console.warn("[A1BaseAPI] Missing 'from' property: a valid 'from' number is required to send an individual message.");
+                throw new Error("[A1BaseAPI] Missing 'from' property: a valid 'from' number is required to send an individual message.");
             }
             if (!data.content) {
-                console.warn("[A1BaseAPI] Missing 'content' property: 'content' is required to send an individual message.");
+                throw new Error("[A1BaseAPI] Missing 'content' property: 'content' is required to send an individual message.");
             }
             const sanitizedData = Object.assign(Object.assign({}, data), { content: (0, sanitizer_1.sanitizeInput)(data.content), attachment_uri: data.attachment_uri
                     ? (0, sanitizer_1.validateAttachmentUri)(data.attachment_uri)
@@ -48,10 +48,10 @@ class A1BaseAPI {
     sendGroupMessage(accountId, data) {
         return __awaiter(this, void 0, void 0, function* () {
             if (!data.from) {
-                console.warn("[A1BaseAPI] Missing 'from' property: a valid 'from' number is required to send a group message.");
+                throw new Error("[A1BaseAPI] Missing 'from' property: a valid 'from' number is required to send a group message.");
             }
             if (!data.content) {
-                console.warn("[A1BaseAPI] Missing 'content' property: 'content' is required to send a group message.");
+                throw new Error("[A1BaseAPI] Missing 'content' property: 'content' is required to send a group message.");
             }
             const sanitizedData = Object.assign(Object.assign({}, data), { content: (0, sanitizer_1.sanitizeInput)(data.content), attachment_uri: data.attachment_uri
                     ? (0, sanitizer_1.validateAttachmentUri)(data.attachment_uri)
@@ -115,6 +115,22 @@ class A1BaseAPI {
             // Sanitize content before processing
             const sanitizedData = Object.assign(Object.assign({}, data), { content: (0, sanitizer_1.sanitizeInput)(data.content) });
             const url = '/wa/whatsapp/incoming';
+            return this.apiService.post(url, sanitizedData);
+        });
+    }
+    /**
+     * Send an email message.
+     * @param accountId - The account ID.
+     * @param data - The email-related data.
+     * @returns The response from the API.
+     */
+    sendEmailMessage(accountId, data) {
+        return __awaiter(this, void 0, void 0, function* () {
+            // Sanitize relevant fields
+            const sanitizedData = Object.assign(Object.assign({}, data), { subject: (0, sanitizer_1.sanitizeInput)(data.subject), body: (0, sanitizer_1.sanitizeInput)(data.body), attachment_uri: data.attachment_uri
+                    ? (0, sanitizer_1.validateAttachmentUri)(data.attachment_uri)
+                    : undefined });
+            const url = `/v1/emails/${accountId}/send`;
             return this.apiService.post(url, sanitizedData);
         });
     }

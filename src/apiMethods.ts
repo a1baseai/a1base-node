@@ -175,7 +175,7 @@ class A1BaseAPI {
         ? validateAttachmentUri(data.attachment_uri)
         : undefined,
     };
-    const url = `/v1/emails/${accountId}/send`;
+    const url = `/emails/${accountId}/send`;
     return this.apiService.post(url, sanitizedData);
   }
 }
