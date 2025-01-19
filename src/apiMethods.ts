@@ -8,6 +8,7 @@ import type {
   SendGroupMessageData,
   SendIndividualMessageData,
   WhatsAppIncomingData,
+  EmailSendData,
 } from './types';
 import { sanitizeInput, validateAttachmentUri } from './utils/sanitizer';
 import { isTimestampFresh } from './utils/timeValidator';
@@ -155,6 +156,26 @@ class A1BaseAPI {
     };
 
     const url = '/wa/whatsapp/incoming';
+    return this.apiService.post(url, sanitizedData);
+  }
+
+  /**
+   * Send an email message.
+   * @param accountId - The account ID.
+   * @param data - The email-related data.
+   * @returns The response from the API.
+   */
+  public async sendEmailMessage(accountId: string, data: EmailSendData) {
+    // Sanitize relevant fields
+    const sanitizedData = {
+      ...data,
+      subject: sanitizeInput(data.subject),
+      body: sanitizeInput(data.body),
+      attachment_uri: data.attachment_uri
+        ? validateAttachmentUri(data.attachment_uri)
+        : undefined,
+    };
+    const url = `/v1/emails/${accountId}/send`;
     return this.apiService.post(url, sanitizedData);
   }
 }

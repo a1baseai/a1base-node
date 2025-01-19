@@ -85,3 +85,19 @@ export interface RateLimitConfig {
   /** Time to wait before retrying when rate limited (ms) (default: 1000) */
   retryAfter?: number;
 }
+
+/**
+ * Interface representing the structure for sending an email message.
+ */
+export interface EmailSendData {
+    sender_address: string;
+    recipient_address: string;
+    subject: string;
+    body: string;
+    headers?: {
+        bcc?: string[];
+        cc?: string[];
+        'reply-to'?: string;
+    };
+    attachment_uri?: string;
+}
