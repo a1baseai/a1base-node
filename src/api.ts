@@ -40,7 +40,7 @@ class APIService {
    */
   constructor({
     credentials,
-    baseURL = 'https://api.a1base.com/v1/messages',
+    baseURL = 'https://api.a1base.com/v1',
     rateLimitConfig = {}
   }: {
     credentials: APICredentials;

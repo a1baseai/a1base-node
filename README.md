@@ -121,7 +121,7 @@ const credentials = {
 };
 
 // HTTPS is enforced for security
-const baseURL = 'https://api.a1base.com/v1/messages';
+const baseURL = 'https://api.a1base.com/v1';
 
 const client = new A1BaseAPI({ credentials, baseURL });
 ```

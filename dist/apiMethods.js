@@ -36,7 +36,7 @@ class A1BaseAPI {
             const sanitizedData = Object.assign(Object.assign({}, data), { content: (0, sanitizer_1.sanitizeInput)(data.content), attachment_uri: data.attachment_uri
                     ? (0, sanitizer_1.validateAttachmentUri)(data.attachment_uri)
                     : undefined });
-            const url = `/individual/${accountId}/send`;
+            const url = `/messages/individual/${accountId}/send`;
             return this.apiService.post(url, sanitizedData);
         });
     }
@@ -56,7 +56,7 @@ class A1BaseAPI {
             const sanitizedData = Object.assign(Object.assign({}, data), { content: (0, sanitizer_1.sanitizeInput)(data.content), attachment_uri: data.attachment_uri
                     ? (0, sanitizer_1.validateAttachmentUri)(data.attachment_uri)
                     : undefined });
-            const url = `/group/${accountId}/send`;
+            const url = `/messages/group/${accountId}/send`;
             return this.apiService.post(url, sanitizedData);
         });
     }
@@ -67,7 +67,7 @@ class A1BaseAPI {
      */
     getMessageDetails(accountId, messageId) {
         return __awaiter(this, void 0, void 0, function* () {
-            const url = `/individual/${accountId}/get-details/${messageId}`;
+            const url = `/messages/individual/${accountId}/get-details/${messageId}`;
             return this.apiService.get(url);
         });
     }
@@ -78,7 +78,7 @@ class A1BaseAPI {
      */
     getChatGroupDetails(accountId, threadId) {
         return __awaiter(this, void 0, void 0, function* () {
-            const url = `/threads/${accountId}/get-details/${threadId}`;
+            const url = `/messages/threads/${accountId}/get-details/${threadId}`;
             return this.apiService.get(url);
         });
     }
@@ -89,7 +89,7 @@ class A1BaseAPI {
      */
     getRecentMessages(accountId, threadId) {
         return __awaiter(this, void 0, void 0, function* () {
-            const url = `/threads/${accountId}/get-recent/${threadId}`;
+            const url = `/messages/threads/${accountId}/get-recent/${threadId}`;
             return this.apiService.get(url);
         });
     }
@@ -98,7 +98,7 @@ class A1BaseAPI {
      */
     getUpdates() {
         return __awaiter(this, void 0, void 0, function* () {
-            const url = `/updates`;
+            const url = `/messages/updates`;
             return this.apiService.get(url);
         });
     }
@@ -114,7 +114,7 @@ class A1BaseAPI {
             }
             // Sanitize content before processing
             const sanitizedData = Object.assign(Object.assign({}, data), { content: (0, sanitizer_1.sanitizeInput)(data.content) });
-            const url = '/wa/whatsapp/incoming';
+            const url = '/messages/wa/whatsapp/incoming';
             return this.apiService.post(url, sanitizedData);
         });
     }
