@@ -1,7 +1,7 @@
 import type { APICredentials, GroupDetails, MessageDetails, RecentMessages, SendGroupMessageData, SendIndividualMessageData, WhatsAppIncomingData } from './types';
 declare class A1BaseAPI {
     private apiService;
-    constructor({ credentials, baseURL }: {
+    constructor({ credentials, baseURL, }: {
         credentials: APICredentials;
         baseURL?: string;
     });

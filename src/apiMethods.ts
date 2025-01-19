@@ -35,13 +35,13 @@ class A1BaseAPI {
     data: SendIndividualMessageData
   ): Promise<any> {
     if (!data.from) {
-      console.warn(
+      throw new Error(
         "[A1BaseAPI] Missing 'from' property: a valid 'from' number is required to send an individual message."
       );
     }
 
     if (!data.content) {
-      console.warn(
+      throw new Error(
         "[A1BaseAPI] Missing 'content' property: 'content' is required to send an individual message."
       );
     }
@@ -67,13 +67,13 @@ class A1BaseAPI {
     data: SendGroupMessageData
   ): Promise<any> {
     if (!data.from) {
-      console.warn(
+      throw new Error(
         "[A1BaseAPI] Missing 'from' property: a valid 'from' number is required to send a group message."
       );
     }
 
     if (!data.content) {
-      console.warn(
+      throw new Error(
         "[A1BaseAPI] Missing 'content' property: 'content' is required to send a group message."
       );
     }

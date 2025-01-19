@@ -17,7 +17,7 @@ const api_1 = __importDefault(require("./api"));
 const sanitizer_1 = require("./utils/sanitizer");
 const timeValidator_1 = require("./utils/timeValidator");
 class A1BaseAPI {
-    constructor({ credentials, baseURL }) {
+    constructor({ credentials, baseURL, }) {
         this.apiService = new api_1.default({ credentials, baseURL });
     }
     /**
@@ -27,7 +27,15 @@ class A1BaseAPI {
      */
     sendIndividualMessage(accountId, data) {
         return __awaiter(this, void 0, void 0, function* () {
-            const sanitizedData = Object.assign(Object.assign({}, data), { content: (0, sanitizer_1.sanitizeInput)(data.content), attachment_uri: data.attachment_uri ? (0, sanitizer_1.validateAttachmentUri)(data.attachment_uri) : undefined });
+            if (!data.from) {
+                console.warn("[A1BaseAPI] Missing 'from' property: a valid 'from' number is required to send an individual message.");
+            }
+            if (!data.content) {
+                console.warn("[A1BaseAPI] Missing 'content' property: 'content' is required to send an individual message.");
+            }
+            const sanitizedData = Object.assign(Object.assign({}, data), { content: (0, sanitizer_1.sanitizeInput)(data.content), attachment_uri: data.attachment_uri
+                    ? (0, sanitizer_1.validateAttachmentUri)(data.attachment_uri)
+                    : undefined });
             const url = `/individual/${accountId}/send`;
             return this.apiService.post(url, sanitizedData);
         });
@@ -39,7 +47,15 @@ class A1BaseAPI {
      */
     sendGroupMessage(accountId, data) {
         return __awaiter(this, void 0, void 0, function* () {
-            const sanitizedData = Object.assign(Object.assign({}, data), { content: (0, sanitizer_1.sanitizeInput)(data.content), attachment_uri: data.attachment_uri ? (0, sanitizer_1.validateAttachmentUri)(data.attachment_uri) : undefined });
+            if (!data.from) {
+                console.warn("[A1BaseAPI] Missing 'from' property: a valid 'from' number is required to send a group message.");
+            }
+            if (!data.content) {
+                console.warn("[A1BaseAPI] Missing 'content' property: 'content' is required to send a group message.");
+            }
+            const sanitizedData = Object.assign(Object.assign({}, data), { content: (0, sanitizer_1.sanitizeInput)(data.content), attachment_uri: data.attachment_uri
+                    ? (0, sanitizer_1.validateAttachmentUri)(data.attachment_uri)
+                    : undefined });
             const url = `/group/${accountId}/send`;
             return this.apiService.post(url, sanitizedData);
         });
