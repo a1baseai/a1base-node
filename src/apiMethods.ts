@@ -21,6 +21,9 @@ class MessageAPI {
    * @param data - Message data.
    */
   public async sendIndividualMessage(accountId: string, data: SendIndividualMessageData): Promise<any> {
+    if (!data.from) {
+      throw new Error('API Error: 400 - Missing required field: from');
+    }
     const url = `/individual/${accountId}/send`;
     return this.apiService.post(url, data);
   }
