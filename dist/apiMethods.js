@@ -112,8 +112,8 @@ class A1BaseAPI {
             if (!(0, timeValidator_1.isTimestampFresh)(new Date(data.timestamp).getTime())) {
                 throw new Error('Webhook request expired: timestamp too old');
             }
-            // Sanitize content before processing
-            const sanitizedData = Object.assign(Object.assign({}, data), { content: (0, sanitizer_1.sanitizeInput)(data.content) });
+            // Sanitize content and message_content.text if present
+            const sanitizedData = Object.assign(Object.assign({}, data), { content: (0, sanitizer_1.sanitizeInput)(data.content), message_content: Object.assign(Object.assign({}, data.message_content), { text: data.message_content.text ? (0, sanitizer_1.sanitizeInput)(data.message_content.text) : undefined }) });
             const url = '/messages/wa/whatsapp/incoming';
             return this.apiService.post(url, sanitizedData);
         });
@@ -132,6 +132,27 @@ class A1BaseAPI {
                     : undefined });
             const url = `/emails/${accountId}/send`;
             return this.apiService.post(url, sanitizedData);
+        });
+    }
+    /**
+     * Get all threads for an account.
+     * @param accountId - The account ID.
+     */
+    getAllThreads(accountId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const url = `/messages/threads/${accountId}/get-all`;
+            return this.apiService.get(url);
+        });
+    }
+    /**
+     * Get all threads for a specific phone number.
+     * @param accountId - The account ID.
+     * @param phoneNumber - The phone number to filter threads by.
+     */
+    getAllThreadsByNumber(accountId, phoneNumber) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const url = `/messages/threads/${accountId}/get-all/${phoneNumber}`;
+            return this.apiService.get(url);
         });
     }
 }
