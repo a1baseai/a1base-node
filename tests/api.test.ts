@@ -2,7 +2,7 @@
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 import MessageAPI from '../src/apiMethods';
-import { APICredentials, RecentMessages } from '../src/types';
+import { APICredentials, RecentMessages, ThreadList } from '../src/types';
 
 const mock = new MockAdapter(axios);
 
@@ -306,5 +306,92 @@ describe('MessageAPI', () => {
         'Network Error: Unable to connect to the server - Please check your internet connection and try again'
       );
     });
+  });
+
+  it('should get all threads for an account', async () => {
+    const mockThreads: ThreadList = {
+      threads: [
+        {
+          thread_id: 'thread1',
+          thread_type: 'group',
+          chat_name: 'Test Group',
+          participants: ['+1234567890', '+0987654321'],
+          created_at: '2024-03-17T12:00:00Z',
+          last_message: {
+            content: 'Hello!',
+            timestamp: '2024-03-17T12:00:00Z',
+            sender_name: 'John',
+          },
+        },
+      ],
+      total_count: 1,
+      has_more: false,
+    };
+
+    mock.onGet(`/threads/${accountId}/get-all`).reply(config => {
+      expect(config.headers!['X-API-Key']).toBe(credentials.apiKey);
+      expect(config.headers!['X-API-Secret']).toBe(credentials.apiSecret);
+      return [200, mockThreads];
+    });
+
+    const response = await client.getAllThreads(accountId);
+    expect(response).toEqual(mockThreads);
+  });
+
+  it('should get all threads for a specific phone number', async () => {
+    const phoneNumber = '+1234567890';
+    const mockThreads: ThreadList = {
+      threads: [
+        {
+          thread_id: 'thread1',
+          thread_type: 'individual',
+          chat_name: 'Individual Chat',
+          participants: [phoneNumber, '+0987654321'],
+          created_at: '2024-03-17T12:00:00Z',
+        },
+      ],
+      total_count: 1,
+      has_more: false,
+    };
+
+    mock.onGet(`/threads/${accountId}/get-all/${phoneNumber}`).reply(config => {
+      expect(config.headers!['X-API-Key']).toBe(credentials.apiKey);
+      expect(config.headers!['X-API-Secret']).toBe(credentials.apiSecret);
+      return [200, mockThreads];
+    });
+
+    const response = await client.getAllThreadsByNumber(accountId, phoneNumber);
+    expect(response).toEqual(mockThreads);
+  });
+
+  it('should handle incoming WhatsApp messages with new fields', async () => {
+    const incomingData = {
+      thread_id: '3456098@s.whatsapp',
+      message_id: '2asd5678cfvgh123',
+      thread_type: 'group' as const,
+      content: 'Hi there!',
+      sender_name: 'Bobby',
+      sender_number: '61421868490',
+      a1_account_id: accountId,
+      timestamp: new Date().toISOString(),
+      service: 'whatsapp' as const,
+      message_type: 'text' as const,
+      is_from_agent: false,
+      message_content: {
+        text: 'Hi there!',
+      },
+    };
+
+    mock.onPost('/wa/whatsapp/incoming').reply(config => {
+      expect(config.headers!['X-API-Key']).toBe(credentials.apiKey);
+      expect(config.headers!['X-API-Secret']).toBe(credentials.apiSecret);
+      const data = JSON.parse(config.data);
+      expect(data.message_type).toBe('text');
+      expect(data.is_from_agent).toBe(false);
+      return [200, { status: 'received' }];
+    });
+
+    const response = await client.handleWhatsAppIncoming(incomingData);
+    expect(response).toEqual({ status: 'received' });
   });
 });

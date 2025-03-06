@@ -66,7 +66,13 @@ export interface WhatsAppIncomingData {
   sender_name: string;
   a1_account_id: string;
   timestamp: string;
-  service: 'email' | 'sms' | 'whatsapp';
+  service: 'whatsapp' | 'telegram';
+  message_type: 'text' | 'image' | 'video' | 'audio' | 'document';
+  is_from_agent: boolean;
+  message_content: {
+    text?: string;
+    // Add other content types as needed
+  };
 }
 
 export interface APICredentials {
@@ -100,4 +106,24 @@ export interface EmailSendData {
         'reply-to'?: string;
     };
     attachment_uri?: string;
+}
+
+// Add new interfaces for thread management
+export interface Thread {
+  thread_id: string;
+  thread_type: 'individual' | 'group' | 'broadcast';
+  chat_name: string;
+  participants: string[];
+  last_message?: {
+    content: string;
+    timestamp: string;
+    sender_name: string;
+  };
+  created_at: string;
+}
+
+export interface ThreadList {
+  threads: Thread[];
+  total_count: number;
+  has_more: boolean;
 }

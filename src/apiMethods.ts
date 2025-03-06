@@ -9,6 +9,8 @@ import type {
   SendIndividualMessageData,
   WhatsAppIncomingData,
   EmailSendData,
+  Thread,
+  ThreadList,
 } from './types';
 import { sanitizeInput, validateAttachmentUri } from './utils/sanitizer';
 import { isTimestampFresh } from './utils/timeValidator';
@@ -149,10 +151,14 @@ class A1BaseAPI {
       throw new Error('Webhook request expired: timestamp too old');
     }
 
-    // Sanitize content before processing
+    // Sanitize content and message_content.text if present
     const sanitizedData = {
       ...data,
       content: sanitizeInput(data.content),
+      message_content: {
+        ...data.message_content,
+        text: data.message_content.text ? sanitizeInput(data.message_content.text) : undefined,
+      },
     };
 
     const url = '/messages/wa/whatsapp/incoming';
@@ -177,6 +183,28 @@ class A1BaseAPI {
     };
     const url = `/emails/${accountId}/send`;
     return this.apiService.post(url, sanitizedData);
+  }
+
+  /**
+   * Get all threads for an account.
+   * @param accountId - The account ID.
+   */
+  public async getAllThreads(accountId: string): Promise<ThreadList> {
+    const url = `/messages/threads/${accountId}/get-all`;
+    return this.apiService.get(url);
+  }
+
+  /**
+   * Get all threads for a specific phone number.
+   * @param accountId - The account ID.
+   * @param phoneNumber - The phone number to filter threads by.
+   */
+  public async getAllThreadsByNumber(
+    accountId: string,
+    phoneNumber: string
+  ): Promise<ThreadList> {
+    const url = `/messages/threads/${accountId}/get-all/${phoneNumber}`;
+    return this.apiService.get(url);
   }
 }
 
