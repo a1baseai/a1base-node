@@ -47,6 +47,10 @@ A powerful and easy-to-use Node.js client for interacting with the [A1Base](http
     - [getRecentMessages](#getrecentmessages)
     - [getAllThreads](#getallthreads)
     - [getAllThreadsByNumber](#getallthreadsbynumber)
+  - [Email Features](#email-features)
+    - [createEmailAddress](#createemailaddress)
+    - [sendEmailMessage](#sendemailmessage)
+    - [handleEmailIncoming](#handleemailincoming)
   - [Webhooks](#webhooks)
     - [handleWhatsAppIncoming](#handlewhatsappincoming)
 
@@ -257,6 +261,75 @@ const webhookData = {
 try {
   const result = await client.handleWhatsAppIncoming(webhookData);
   console.log("Webhook processed:", result);
+} catch (error) {
+  console.error("Error:", error.message);
+}
+```
+
+## Email Features
+
+A1Base provides powerful email capabilities through the SDK, allowing you to create email addresses, send emails, and process incoming email webhooks.
+
+createEmailAddress
+Creates a new email address for an account.
+
+```javascript
+const emailData = {
+  address: "yourname", // Local part of the email (before @)
+  domain_name: "a1send.com", // Domain name (a1send.com or a101.bot)
+};
+
+try {
+  const response = await client.createEmailAddress("accountId", emailData);
+  console.log("Email address created:", response);
+  // Response: { "address": "yourname@a1send.com", "status": "active" }
+} catch (error) {
+  console.error("Error:", error.message);
+}
+```
+
+sendEmailMessage
+Sends an email message to a recipient.
+
+```javascript
+const emailData = {
+  sender_address: "yourname@a1send.com", // Sender's email address
+  recipient_address: "recipient@example.com", // Recipient's email address
+  subject: "Hello from A1Base", // Email subject
+  body: "This is an example email body.", // Email content (plain text or HTML)
+  headers: {
+    cc: "someone@example.com", // Optional CC recipients
+    bcc: "hidden@example.com", // Optional BCC recipients
+  },
+};
+
+try {
+  const response = await client.sendEmailMessage("accountId", emailData);
+  console.log("Email sent:", response);
+  // Response: { "recipient": "recipient@example.com", "status": "queued" }
+} catch (error) {
+  console.error("Error:", error.message);
+}
+```
+
+handleEmailIncoming
+Processes incoming email webhook data.
+
+```javascript
+// Webhook data structure for incoming emails
+const webhookData = {
+  email_id: "a82b3e6b-dc79-46ad-9284-a166629592e3", // Unique identifier for the email
+  subject: "Email Subject", // Subject line of the email
+  sender_address: "sender@example.com", // Email address of the sender
+  recipient_address: "yourname@a1send.com", // Your A1Base email address
+  timestamp: "2025-03-19T10:24:08.46083+00:00", // ISO 8601 timestamp
+  service: "email", // Always "email" for email webhooks
+  raw_email_data: "Full email content including headers and body", // Complete raw email
+};
+
+try {
+  const result = await client.handleEmailIncoming(webhookData);
+  console.log("Email webhook processed:", result);
 } catch (error) {
   console.error("Error:", error.message);
 }
