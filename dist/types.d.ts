@@ -112,3 +112,22 @@ export interface ThreadList {
     total_count: number;
     has_more: boolean;
 }
+/**
+ * Interface representing the structure for creating an email address.
+ */
+export interface EmailCreateData {
+    address: string;
+    domain_name: string;
+}
+/**
+ * Interface representing the structure for incoming email webhook data.
+ */
+export interface EmailIncomingData {
+    email_id: string;
+    subject: string;
+    sender_address: string;
+    recipient_address: string;
+    timestamp: string;
+    service: 'email';
+    raw_email_data: string;
+}
