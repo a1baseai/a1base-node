@@ -135,6 +135,52 @@ class A1BaseAPI {
         });
     }
     /**
+     * Create an email address.
+     * @param accountId - The account ID.
+     * @param data - The email address creation data.
+     * @returns The response from the API.
+     */
+    createEmailAddress(accountId, data) {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (!data.address || data.address.length < 5 || data.address.length > 30) {
+                throw new Error("[A1BaseAPI] Invalid 'address': email address must be between 5 and 30 characters long.");
+            }
+            if (data.address.startsWith('.') || data.address.endsWith('.')) {
+                throw new Error("[A1BaseAPI] Invalid 'address': email address cannot start or end with a dot.");
+            }
+            if (data.address.includes('..')) {
+                throw new Error("[A1BaseAPI] Invalid 'address': email address cannot have consecutive dots.");
+            }
+            if (data.address.includes(' ') || data.address.includes(',')) {
+                throw new Error("[A1BaseAPI] Invalid 'address': email address cannot contain spaces or commas.");
+            }
+            const validCharsRegex = /^[a-zA-Z0-9._-]+$/;
+            if (!validCharsRegex.test(data.address)) {
+                throw new Error("[A1BaseAPI] Invalid 'address': email address can only contain letters, numbers, and characters '.', '_', '-'.");
+            }
+            if (!data.domain_name || (data.domain_name !== 'a1send.com' && data.domain_name !== 'a101.bot')) {
+                throw new Error("[A1BaseAPI] Invalid 'domain_name': free tier domains are limited to a1send.com and a101.bot.");
+            }
+            const sanitizedData = Object.assign(Object.assign({}, data), { address: (0, sanitizer_1.sanitizeInput)(data.address) });
+            const url = `/emails/${accountId}/create-email`;
+            return this.apiService.post(url, sanitizedData);
+        });
+    }
+    /**
+     * Handle incoming email webhook data.
+     * @param data - Email incoming data from webhook.
+     */
+    handleEmailIncoming(data) {
+        return __awaiter(this, void 0, void 0, function* () {
+            // Validate timestamp to prevent replay attacks
+            if (!(0, timeValidator_1.isTimestampFresh)(new Date(data.timestamp).getTime())) {
+                throw new Error('Webhook request expired: timestamp too old');
+            }
+            const sanitizedData = Object.assign(Object.assign({}, data), { subject: (0, sanitizer_1.sanitizeInput)(data.subject), sender_address: (0, sanitizer_1.sanitizeInput)(data.sender_address), recipient_address: (0, sanitizer_1.sanitizeInput)(data.recipient_address) });
+            return sanitizedData;
+        });
+    }
+    /**
      * Get all threads for an account.
      * @param accountId - The account ID.
      */

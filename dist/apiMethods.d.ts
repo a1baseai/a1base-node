@@ -1,4 +1,4 @@
-import type { APICredentials, GroupDetails, MessageDetails, RecentMessages, SendGroupMessageData, SendIndividualMessageData, WhatsAppIncomingData, EmailSendData, ThreadList } from './types';
+import type { APICredentials, GroupDetails, MessageDetails, RecentMessages, SendGroupMessageData, SendIndividualMessageData, WhatsAppIncomingData, EmailSendData, EmailCreateInbox, EmailIncomingData, ThreadList } from './types';
 declare class A1BaseAPI {
     private apiService;
     constructor({ credentials, baseURL, }: {
@@ -51,6 +51,18 @@ declare class A1BaseAPI {
      * @returns The response from the API.
      */
     sendEmailMessage(accountId: string, data: EmailSendData): Promise<unknown>;
+    /**
+     * Create an email address.
+     * @param accountId - The account ID.
+     * @param data - The email address creation data.
+     * @returns The response from the API.
+     */
+    createEmailAddress(accountId: string, data: EmailCreateInbox): Promise<unknown>;
+    /**
+     * Handle incoming email webhook data.
+     * @param data - Email incoming data from webhook.
+     */
+    handleEmailIncoming(data: EmailIncomingData): Promise<any>;
     /**
      * Get all threads for an account.
      * @param accountId - The account ID.
