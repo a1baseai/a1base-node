@@ -9,7 +9,7 @@ import type {
   SendIndividualMessageData,
   WhatsAppIncomingData,
   EmailSendData,
-  EmailCreateData,
+  EmailCreateInbox,
   EmailIncomingData,
   Thread,
   ThreadList,
@@ -193,7 +193,7 @@ class A1BaseAPI {
    * @param data - The email address creation data.
    * @returns The response from the API.
    */
-  public async createEmailAddress(accountId: string, data: EmailCreateData) {
+  public async createEmailAddress(accountId: string, data: EmailCreateInbox) {
     if (!data.address || data.address.length < 5 || data.address.length > 30) {
       throw new Error(
         "[A1BaseAPI] Invalid 'address': email address must be between 5 and 30 characters long."

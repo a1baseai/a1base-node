@@ -113,9 +113,9 @@ export interface ThreadList {
     has_more: boolean;
 }
 /**
- * Interface representing the structure for creating an email address.
+ * Interface representing the structure for creating an email inbox.
  */
-export interface EmailCreateData {
+export interface EmailCreateInbox {
     address: string;
     domain_name: string;
 }
