@@ -8,15 +8,15 @@
     "build": "tsc",
     "test": "jest",
     "prepare": "npm run build"
-  }, 
-   "files": [
+  },
+  "files": [
     "dist/**/*"
   ],
   "keywords": [],
   "author": "developers@a1base.com",
   "license": "ISC",
   "dependencies": {
-    "axios": "^1.7.9"
+    "axios": "^1.13.2"
   },
   "devDependencies": {
     "@types/axios": "^0.14.4",
@@ -26,5 +26,8 @@
     "jest": "^29.7.0",
     "ts-jest": "^29.2.5",
     "typescript": "^5.6.3"
+  },
+  "overrides": {
+    "form-data@<=4.0.4": "4.0.4"
   }
 }
